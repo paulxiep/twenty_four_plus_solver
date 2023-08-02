@@ -1,4 +1,4 @@
-## Arithmetic
+## 24 Plus Solver
 
 This is a simple 1-day project that find solutions for the number game, 
 in which you're given a few integer numbers and told to find ways to arrive at a target integer.
