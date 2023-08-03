@@ -12,4 +12,4 @@ such that both the current value and the representation used to arrive at curren
 3. None of the Arithmetic subclasses is meant to be initialized directly,
 instead, use get method on Number and Operator subclasses.
 
-Entry point is ```main.py``` and the main function is ```search()```
+Entry point is ```main.py``` and the main function are ```search_range()``` and ```search_value()```
