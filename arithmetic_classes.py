@@ -2,8 +2,15 @@ from dataclasses import dataclass
 from math import sqrt, factorial
 
 
+@dataclass
 class Arithmetic:
+    value: str
+    repr: str
     '''
+    Stores both value and repr, the representation.
+    For Operators these are the same, 
+    but for Numbers repr will be steps used to arrive at current value.
+    
     right shift operator will be overridden for relevant subclasses
     the override is used to chain mathematical operations
     '''
@@ -12,11 +19,8 @@ class Arithmetic:
 
 @dataclass
 class Number(Arithmetic):
-    value: float
-    repr: str
     '''
     Class to represent the numbers.
-    Stores both value and the steps used to arrive at that value.
     Not to be initialized directly, use get method.
     '''
 
@@ -43,10 +47,8 @@ class Number(Arithmetic):
             raise NotImplementedError('Number can only be followed by PostSingularOperator or DuoOperator')
 
 
-@dataclass(init=False)
+@dataclass
 class Operator(Arithmetic):
-    value: str
-    repr: str
     '''
     Base operator class.
     Not to be initialized directly, use get method.
@@ -77,10 +79,12 @@ class PreSingularOperator(Operator):
                 return Number(sqrt(other.value), 'sqrt(' + other.repr + ')')
             elif self.value == '-':
                 return Number(-other.value, '(-' + other.repr + ')')
+            elif self.value == '/':
+                return Number(1 / other.value, '(1/' + other.repr + ')')
             else:
                 raise NotImplementedError('Unknown Singular Operator, shouldn\'t be here')
         else:
-            raise NotImplementedError
+            raise NotImplementedError('PreSingularOperator needs to be followed by Number')
 
 
 @dataclass
@@ -88,21 +92,24 @@ class PostSingularOperator(Operator):
     '''
     for operators that operate on single number and follows it
     currently only factorial is defined
+
+    Class type is required to chain with Number.
     '''
     pass
 
 
 @dataclass
 class DuoOperator(Operator):
-    repr: str
     '''
     For operators that require 2 numbers
+
+    Class type is required to chain with Number into PartialOperation instance.
     '''
     pass
 
 
 @dataclass
-class PartialOperation(Arithmetic):
+class PartialOperation:
     number: Number
     next: DuoOperator
     '''
